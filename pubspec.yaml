@@ -1,0 +1,27 @@
+name: eggnstone_google_crashlytics
+copyright: 2020 Mark Eggenstein
+description: Google Crashlytics wrapper
+homepage: https://eggnstone.dev
+version: 0.0.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Flutter tools
+  #eggnstone_flutter: ^0.2.0
+  eggnstone_flutter:
+    path: ..\eggnstone_flutter
+
+  # Google/Firebase Crashlytics, logging crashes
+  firebase_crashlytics: ^0.1.4+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
