@@ -3,15 +3,21 @@
 A wrapper for Google Crashlytics
 
 # For Crashlytics to work add the following
-- Add in android/build.gradle to buildscript / repositories
+- In ```android/build.gradle``` add the following to ```buildscript / repositories```
+```
 maven {
     url 'https://maven.fabric.io/public'
 }
+```
 
-- Add in android/app/build.gradle to buildscript / dependencies
-    classpath 'com.google.gms:google-services:4.3.0'
-    classpath 'io.fabric.tools:gradle:1.26.1'
+- In ```android/app/build.gradle``` add the following to ```buildscript / dependencies```
+```
+classpath 'com.google.gms:google-services:4.3.3'
+classpath 'io.fabric.tools:gradle:1.31.2'
+```
     
-- Add at the bottom of android/build.gradle
+- Add at the bottom of ```android/build.gradle```
+```
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
+```

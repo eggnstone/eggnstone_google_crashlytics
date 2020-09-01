@@ -13,9 +13,9 @@ dependencies:
     sdk: flutter
 
   # Flutter tools
-  #eggnstone_flutter: ^0.2.0
-  eggnstone_flutter:
-    path: ..\eggnstone_flutter
+  eggnstone_flutter: ^0.3.0
+  #eggnstone_flutter:
+  #  path: ..\eggnstone_flutter
 
   # Google/Firebase Crashlytics, logging crashes
   firebase_crashlytics: ^0.1.4+1
