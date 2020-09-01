@@ -12,8 +12,6 @@ class GoogleCrashlyticsService
     with AnalyticsMixin, LoggerMixin
     implements IGoogleCrashlyticsService
 {
-    static const String ANALYTICS_KEY__CRASHLYTICS_FOR_WEB = 'CrashlyticsForWeb';
-
     final Crashlytics _crashlytics;
     final CrashReporterCallback _additionalCrashReporterCallback;
 
