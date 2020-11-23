@@ -2,33 +2,37 @@ import 'dart:async';
 
 import 'package:eggnstone_flutter/eggnstone_flutter.dart';
 import 'package:eggnstone_google_crashlytics/google/IGoogleCrashlyticsService.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 
 typedef CrashReporterCallback = Function(Map<String, dynamic> params);
 
-/// Requires [IAnalyticsService, LoggerService]
+/// Requires [LoggerService]
 class GoogleCrashlyticsService
-    with AnalyticsMixin, LoggerMixin
+    with LoggerMixin
     implements IGoogleCrashlyticsService
 {
-    final Crashlytics _crashlytics;
-    final CrashReporterCallback _additionalCrashReporterCallback;
+    final FirebaseCrashlytics _crashlytics;
+    final CrashReporterCallback? _additionalCrashReporterCallback;
+
+    late LoggerService _logger;
 
     bool _isEnabled;
 
     GoogleCrashlyticsService._internal(this._crashlytics, this._additionalCrashReporterCallback, this._isEnabled)
     {
-        assert(analytics != null, 'Unable to find via GetIt: IAnalyticsService');
         assert(logger != null, 'Unable to find via GetIt: LoggerService');
+        _logger = logger!;
     }
 
     /// Requires [LoggerService]
-    static Future<IGoogleCrashlyticsService> create(CrashReporterCallback alternativeCrashReporter, bool startEnabled)
-    => GoogleCrashlyticsService.createMockable(Crashlytics(), alternativeCrashReporter, startEnabled);
+    static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporter, bool startEnabled)
+    => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporter, startEnabled);
 
     /// Requires [LoggerService]
-    static Future<IGoogleCrashlyticsService> createMockable(Crashlytics crashlytics, CrashReporterCallback alternativeCrashReporter, bool startEnabled)
+    static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporter, bool startEnabled)
     async
     {
         var instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporter, startEnabled);
@@ -40,21 +44,21 @@ class GoogleCrashlyticsService
     {
         FlutterError.onError = (FlutterErrorDetails details)
         {
-            logger.logError('##################################################');
-            logger.logError('# GoogleCrashlyticsService/FlutterError.onError ');
+            _logger.logError('##################################################');
+            _logger.logError('# GoogleCrashlyticsService/FlutterError.onError ');
 
-            if (logger.isEnabled)
+            if (_logger.isEnabled)
             {
                 // TODO: move to LoggerService
                 FlutterError.dumpErrorToConsole(details);
             }
 
             if (details.stack == null)
-                logger.logError('No stacktrace available.');
+                _logger.logError('No stacktrace available.');
             else
-                logger.logError(details.stack.toString());
+                _logger.logError(details.stack.toString());
 
-            logger.logError('##################################################');
+            _logger.logError('##################################################');
 
             if (_isEnabled)
             {
@@ -64,16 +68,11 @@ class GoogleCrashlyticsService
                 }
                 catch (e2, stackTrace2)
                 {
-                    logger.logError('##################################################');
-                    logger.logError('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError');
-                    logger.logError(e2.toString());
-
-                    if (stackTrace2 == null)
-                        logger.logError('No stacktrace available.');
-                    else
-                        logger.logError(stackTrace2.toString());
-
-                    logger.logError('##################################################');
+                    _logger.logError('##################################################');
+                    _logger.logError('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError');
+                    _logger.logError(e2.toString());
+                    _logger.logError(stackTrace2.toString());
+                    _logger.logError('##################################################');
                 }
 
                 if (_additionalCrashReporterCallback != null)
@@ -89,20 +88,15 @@ class GoogleCrashlyticsService
 
                     try
                     {
-                        _additionalCrashReporterCallback(map);
+                        _additionalCrashReporterCallback?.call(map);
                     }
                     catch (e2, stackTrace2)
                     {
-                        logger.logError('##################################################');
-                        logger.logError('# GoogleCrashlyticsService/FlutterError.onError/_additionalCrashReporterCallback');
-                        logger.logError(e2.toString());
-
-                        if (stackTrace2 == null)
-                            logger.logError('No stacktrace available.');
-                        else
-                            logger.logError(stackTrace2.toString());
-
-                        logger.logError('##################################################');
+                        _logger.logError('##################################################');
+                        _logger.logError('# GoogleCrashlyticsService/FlutterError.onError/_additionalCrashReporterCallback');
+                        _logger.logError(e2.toString());
+                        _logger.logError(stackTrace2.toString());
+                        _logger.logError('##################################################');
                     }
                 }
             }
@@ -114,23 +108,19 @@ class GoogleCrashlyticsService
 
     void run(Widget app)
     {
-        runZoned<Future<void>>(()
-        async
-        {
-            runApp(app);
-        },
-            onError: (e, stackTrace)
+        runZonedGuarded<Future<void>>(
+                ()
+            async
             {
-                logger.logError('##################################################');
-                logger.logError('# GoogleCrashlyticsService.run/runZoned/onError');
-                logger.logError(e.toString());
-
-                if (stackTrace == null)
-                    logger.logError('No stacktrace available.');
-                else
-                    logger.logError(stackTrace.toString());
-
-                logger.logError('##################################################');
+                runApp(app);
+            },
+                (e, stackTrace)
+            {
+                _logger.logError('##################################################');
+                _logger.logError('# GoogleCrashlyticsService.run/runZoned/onError');
+                _logger.logError(e.toString());
+                _logger.logError(stackTrace.toString());
+                _logger.logError('##################################################');
 
                 if (_isEnabled)
                 {
@@ -140,16 +130,11 @@ class GoogleCrashlyticsService
                     }
                     catch (e2, stackTrace2)
                     {
-                        logger.logError('##################################################');
-                        logger.logError('# GoogleCrashlyticsService.run/runZoned/onError/_crashlytics.recordError');
-                        logger.logError(e2.toString());
-
-                        if (stackTrace2 == null)
-                            logger.logError('No stacktrace available.');
-                        else
-                            logger.logError(stackTrace2.toString());
-
-                        logger.logError('##################################################');
+                        _logger.logError('##################################################');
+                        _logger.logError('# GoogleCrashlyticsService.run/runZoned/onError/_crashlytics.recordError');
+                        _logger.logError(e2.toString());
+                        _logger.logError(stackTrace2.toString());
+                        _logger.logError('##################################################');
                     }
 
                     if (_additionalCrashReporterCallback != null)
@@ -160,25 +145,19 @@ class GoogleCrashlyticsService
                             'CrashlyticsSource': 'GoogleCrashlyticsService.run/runZoned/onError'
                         };
 
-                        if (stackTrace != null)
-                            map['StackTrace'] = stackTrace.toString();
+                        map['StackTrace'] = stackTrace.toString();
 
                         try
                         {
-                            _additionalCrashReporterCallback(map);
+                            _additionalCrashReporterCallback?.call(map);
                         }
                         catch (e2, stackTrace2)
                         {
-                            logger.logError('##################################################');
-                            logger.logError('# GoogleCrashlyticsService.run/runZoned/onError/_additionalCrashReporterCallback');
-                            logger.logError(e2.toString());
-
-                            if (stackTrace2 == null)
-                                logger.logError('No stacktrace available.');
-                            else
-                                logger.logError(stackTrace2.toString());
-
-                            logger.logError('##################################################');
+                            _logger.logError('##################################################');
+                            _logger.logError('# GoogleCrashlyticsService.run/runZoned/onError/_additionalCrashReporterCallback');
+                            _logger.logError(e2.toString());
+                            _logger.logError(stackTrace2.toString());
+                            _logger.logError('##################################################');
                         }
                     }
                 }
