@@ -1,6 +1,6 @@
 # eggnstone_google_crashlytics
 
-Google Crashlytics wrapper. Allows to report via Firebase.
+A wrapper for Google Crashlytics. Allows to report via Firebase.
 
 # For Crashlytics to work add the following
 - In ```android/build.gradle``` add the following to ```buildscript / repositories```
