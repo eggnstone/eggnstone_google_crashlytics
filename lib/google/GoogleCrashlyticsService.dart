@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:eggnstone_flutter/eggnstone_flutter.dart';
 import 'package:eggnstone_google_crashlytics/google/IGoogleCrashlyticsService.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 
