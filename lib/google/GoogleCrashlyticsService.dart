@@ -20,14 +20,14 @@ class GoogleCrashlyticsService
     GoogleCrashlyticsService._internal(this._crashlytics, this._additionalCrashReporterCallback, this._isEnabled);
 
     /// Requires [LoggerService]
-    static Future<IGoogleCrashlyticsService> create(CrashReporterCallback alternativeCrashReporter, bool startEnabled)
-    => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporter, startEnabled);
+    static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
+    => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled);
 
     /// Requires [LoggerService]
-    static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback alternativeCrashReporter, bool startEnabled)
+    static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
     async
     {
-        var instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporter, startEnabled);
+        var instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporterCallback, startEnabled);
         instance._init();
         return instance;
     }
