@@ -6,13 +6,21 @@
 
 * Preparing sound null safety.
 
-## [0.1.0-nullsafety.0] - 23.11.2020
+## [0.3.6] - 26.02.2021
 
-* Preparing sound null safety.
+* Updated dependencies.
+
+## [0.3.5] - 21.02.2021
+
+* Updated dependencies.
 
 ## [0.3.2] - 22.01.2021
 
 * Updated dependencies.
+
+## [0.1.0-nullsafety.0] - 23.11.2020
+
+* Preparing sound null safety.
 
 ## [0.0.2] - 01.09.2020 
 

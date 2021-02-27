@@ -106,7 +106,7 @@ class GoogleCrashlyticsService
             {
                 runApp(app);
             },
-                (e, stackTrace)
+                (Object e, StackTrace stackTrace)
             {
                 logger.logError('##################################################');
                 logger.logError('# GoogleCrashlyticsService.run/runZoned/onError');
