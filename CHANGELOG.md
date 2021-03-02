@@ -1,3 +1,7 @@
+## [1.0.0] - 02.03.2021
+
+* Updated dependencies.  
+
 ## [0.4.1] - 27.02.2021
 
 * Fixed CrashReporterCallback.
