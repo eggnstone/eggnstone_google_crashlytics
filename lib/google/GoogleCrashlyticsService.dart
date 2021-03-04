@@ -7,9 +7,7 @@ import 'package:flutter/widgets.dart';
 
 typedef CrashReporterCallback = Function(Map<String, dynamic> params);
 
-/// Requires [LoggerService]
 class GoogleCrashlyticsService
-    with LoggerMixin
     implements IGoogleCrashlyticsService
 {
     final FirebaseCrashlytics _crashlytics;
@@ -19,11 +17,9 @@ class GoogleCrashlyticsService
 
     GoogleCrashlyticsService._internal(this._crashlytics, this._additionalCrashReporterCallback, this._isEnabled);
 
-    /// Requires [LoggerService]
     static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
     => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled);
 
-    /// Requires [LoggerService]
     static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
     async
     {
@@ -36,21 +32,21 @@ class GoogleCrashlyticsService
     {
         FlutterError.onError = (FlutterErrorDetails details)
         {
-            logger.logError('##################################################');
-            logger.logError('# GoogleCrashlyticsService/FlutterError.onError ');
+            logError('##################################################');
+            logError('# GoogleCrashlyticsService/FlutterError.onError ');
 
-            if (logger.isEnabled)
+            if (isLoggerEnabled)
             {
-                // TODO: move to LoggerService
+                // TODO: move to LogTools
                 FlutterError.dumpErrorToConsole(details);
             }
 
             if (details.stack == null)
-                logger.logError('No stacktrace available.');
+                logError('No stacktrace available.');
             else
-                logger.logError(details.stack.toString());
+                logError(details.stack.toString());
 
-            logger.logError('##################################################');
+            logError('##################################################');
 
             if (_isEnabled)
             {
@@ -60,11 +56,11 @@ class GoogleCrashlyticsService
                 }
                 catch (e2, stackTrace2)
                 {
-                    logger.logError('##################################################');
-                    logger.logError('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError');
-                    logger.logError(e2.toString());
-                    logger.logError(stackTrace2.toString());
-                    logger.logError('##################################################');
+                    logError('##################################################');
+                    logError('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError');
+                    logError(e2.toString());
+                    logError(stackTrace2.toString());
+                    logError('##################################################');
                 }
 
                 if (_additionalCrashReporterCallback != null)
@@ -84,11 +80,11 @@ class GoogleCrashlyticsService
                     }
                     catch (e2, stackTrace2)
                     {
-                        logger.logError('##################################################');
-                        logger.logError('# GoogleCrashlyticsService/FlutterError.onError/_additionalCrashReporterCallback');
-                        logger.logError(e2.toString());
-                        logger.logError(stackTrace2.toString());
-                        logger.logError('##################################################');
+                        logError('##################################################');
+                        logError('# GoogleCrashlyticsService/FlutterError.onError/_additionalCrashReporterCallback');
+                        logError(e2.toString());
+                        logError(stackTrace2.toString());
+                        logError('##################################################');
                     }
                 }
             }
@@ -108,11 +104,11 @@ class GoogleCrashlyticsService
             },
                 (Object e, StackTrace stackTrace)
             {
-                logger.logError('##################################################');
-                logger.logError('# GoogleCrashlyticsService.run/runZoned/onError');
-                logger.logError(e.toString());
-                logger.logError(stackTrace.toString());
-                logger.logError('##################################################');
+                logError('##################################################');
+                logError('# GoogleCrashlyticsService.run/runZoned/onError');
+                logError(e.toString());
+                logError(stackTrace.toString());
+                logError('##################################################');
 
                 if (_isEnabled)
                 {
@@ -122,11 +118,11 @@ class GoogleCrashlyticsService
                     }
                     catch (e2, stackTrace2)
                     {
-                        logger.logError('##################################################');
-                        logger.logError('# GoogleCrashlyticsService.run/runZoned/onError/_crashlytics.recordError');
-                        logger.logError(e2.toString());
-                        logger.logError(stackTrace2.toString());
-                        logger.logError('##################################################');
+                        logError('##################################################');
+                        logError('# GoogleCrashlyticsService.run/runZoned/onError/_crashlytics.recordError');
+                        logError(e2.toString());
+                        logError(stackTrace2.toString());
+                        logError('##################################################');
                     }
 
                     if (_additionalCrashReporterCallback != null)
@@ -145,11 +141,11 @@ class GoogleCrashlyticsService
                         }
                         catch (e2, stackTrace2)
                         {
-                            logger.logError('##################################################');
-                            logger.logError('# GoogleCrashlyticsService.run/runZoned/onError/_additionalCrashReporterCallback');
-                            logger.logError(e2.toString());
-                            logger.logError(stackTrace2.toString());
-                            logger.logError('##################################################');
+                            logError('##################################################');
+                            logError('# GoogleCrashlyticsService.run/runZoned/onError/_additionalCrashReporterCallback');
+                            logError(e2.toString());
+                            logError(stackTrace2.toString());
+                            logError('##################################################');
                         }
                     }
                 }
