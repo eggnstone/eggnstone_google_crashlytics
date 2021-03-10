@@ -10,12 +10,12 @@ typedef CrashReporterCallback = Function(Map<String, dynamic> params);
 class GoogleCrashlyticsService
     implements IGoogleCrashlyticsService
 {
-    final FirebaseCrashlytics _crashlytics;
+    final FirebaseCrashlytics _firebaseCrashlytics;
     final CrashReporterCallback? _additionalCrashReporterCallback;
 
     bool _isEnabled;
 
-    GoogleCrashlyticsService._internal(this._crashlytics, this._additionalCrashReporterCallback, this._isEnabled);
+    GoogleCrashlyticsService._internal(this._firebaseCrashlytics, this._additionalCrashReporterCallback, this._isEnabled);
 
     static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
     => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled);
@@ -52,7 +52,7 @@ class GoogleCrashlyticsService
             {
                 try
                 {
-                    _crashlytics.recordFlutterError(details);
+                    _firebaseCrashlytics.recordFlutterError(details);
                 }
                 catch (e2, stackTrace2)
                 {
@@ -102,11 +102,11 @@ class GoogleCrashlyticsService
             {
                 runApp(app);
             },
-                (Object e, StackTrace stackTrace)
+                (Object error, StackTrace stackTrace)
             {
                 logError('##################################################');
                 logError('# GoogleCrashlyticsService.run/runZoned/onError');
-                logError(e.toString());
+                logError(error.toString());
                 logError(stackTrace.toString());
                 logError('##################################################');
 
@@ -114,7 +114,7 @@ class GoogleCrashlyticsService
                 {
                     try
                     {
-                        _crashlytics.recordError(e, stackTrace);
+                        _firebaseCrashlytics.recordError(error, stackTrace);
                     }
                     catch (e2, stackTrace2)
                     {
@@ -129,7 +129,7 @@ class GoogleCrashlyticsService
                     {
                         Map<String, dynamic> map =
                         {
-                            'Exception': e.toString(),
+                            'Error': error.toString(),
                             'CrashlyticsSource': 'GoogleCrashlyticsService.run/runZoned/onError'
                         };
 
@@ -150,5 +150,23 @@ class GoogleCrashlyticsService
                     }
                 }
             });
+    }
+
+    @override
+    void setUserId(String value)
+    {
+        logInfo((_isEnabled ? 'GoogleCrashlyticsService' : 'Disabled-GoogleCrashlyticsService') + ': setUserId: $value');
+
+        if (_isEnabled)
+            _firebaseCrashlytics.setUserIdentifier(value);
+    }
+
+    @override
+    void setUserProperty(String key, String value)
+    {
+        logInfo((_isEnabled ? 'GoogleCrashlyticsService' : 'Disabled-GoogleCrashlyticsService') + ': setUserProperty: key=$key value=$value');
+
+        if (_isEnabled)
+            _firebaseCrashlytics.setCustomKey(key, value);
     }
 }

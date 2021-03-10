@@ -1,3 +1,7 @@
+## 2.0.0-pre3
+
+* Added setUserId/setUserProperty.
+
 ## 2.0.0-pre0
 
 * Replaced Logger Mixin/Service with LogTools.
