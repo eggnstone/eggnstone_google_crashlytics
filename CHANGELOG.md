@@ -1,9 +1,6 @@
-## 2.0.0-pre3
+## 2.0.0
 
 * Added setUserId/setUserProperty.
-
-## 2.0.0-pre0
-
 * Replaced Logger Mixin/Service with LogTools.
 
 ## 1.1.0
@@ -22,10 +19,6 @@
 
 * Released with sound null safety.
 
-## 0.4.0-nullsafety.0
-
-* Preparing sound null safety.
-
 ## 0.3.6
 
 * Updated dependencies.
@@ -37,10 +30,6 @@
 ## 0.3.2
 
 * Updated dependencies.
-
-## 0.1.0-nullsafety.0
-
-* Preparing sound null safety.
 
 ## 0.0.2
 
