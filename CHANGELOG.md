@@ -1,7 +1,12 @@
+## 3.0.0
+
+* Breaking change: requiring eggnstone_flutter 3.0.0.
+* Fixed Crashlytics for web.
+
 ## 2.0.0
 
+* Breaking change: Replaced Logger Mixin/Service with LogTools.
 * Added setUserId/setUserProperty.
-* Replaced Logger Mixin/Service with LogTools.
 
 ## 1.1.0
 

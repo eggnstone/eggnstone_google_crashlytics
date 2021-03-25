@@ -155,7 +155,7 @@ class GoogleCrashlyticsService
     @override
     void setUserId(String value)
     {
-        logInfo((_isEnabled ? 'GoogleCrashlyticsService' : 'Disabled-GoogleCrashlyticsService') + ': setUserId: $value');
+        logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': setUserId: $value');
 
         if (_isEnabled)
             _firebaseCrashlytics.setUserIdentifier(value);
@@ -164,7 +164,7 @@ class GoogleCrashlyticsService
     @override
     void setUserProperty(String key, String value)
     {
-        logInfo((_isEnabled ? 'GoogleCrashlyticsService' : 'Disabled-GoogleCrashlyticsService') + ': setUserProperty: key=$key value=$value');
+        logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': setUserProperty: key=$key value=$value');
 
         if (_isEnabled)
             _firebaseCrashlytics.setCustomKey(key, value);
