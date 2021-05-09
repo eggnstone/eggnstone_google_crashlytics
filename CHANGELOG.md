@@ -1,3 +1,7 @@
+## 3.1.0
+
+* Updated dependencies.
+
 ## 3.0.0
 
 * Breaking change: requiring eggnstone_flutter 3.0.0.

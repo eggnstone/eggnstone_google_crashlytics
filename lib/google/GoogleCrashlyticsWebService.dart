@@ -69,11 +69,9 @@ class GoogleCrashlyticsService
                     Map<String, dynamic> map =
                     {
                         'Exception': details.exception.toString(),
-                        'CrashlyticsSource': 'GoogleCrashlyticsService/FlutterError.onError'
+                        'CrashlyticsSource': 'GoogleCrashlyticsService/FlutterError.onError',
+                        if (details.stack != null) 'StackTrace': details.stack.toString()
                     };
-
-                    if (details.stack != null)
-                        map['StackTrace'] = details.stack.toString();
 
                     try
                     {

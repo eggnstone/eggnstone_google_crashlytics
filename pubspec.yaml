@@ -2,7 +2,7 @@ name: eggnstone_google_crashlytics
 copyright: 2020-2021 Mark Eggenstein
 description: A wrapper for Google Crashlytics. Allows to report via Firebase.
 homepage: https://github.com/eggnstone/eggnstone_google_crashlytics
-version: 3.0.0
+version: 3.1.0
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -13,14 +13,14 @@ dependencies:
     sdk: flutter
 
   # Flutter tools
-  eggnstone_flutter: ^3.0.0
+  eggnstone_flutter: ^3.1.0
   #eggnstone_flutter:
   #  path: ../eggnstone_flutter
 
   # Google/Firebase Crashlytics, logging crashes
-  firebase_crashlytics: ^1.0.0
+  firebase_crashlytics: ^2.0.2
   # Service locator (included via eggnstone_flutter but "flutter pub publish" warns if not included here)
-  get_it: ^6.0.0
+  get_it: ^7.1.3
 
 dev_dependencies:
   flutter_test:
