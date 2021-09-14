@@ -1,3 +1,8 @@
+## 3.2.1
+
+* Library cleanup.
+* Updated dependencies.
+
 ## 3.1.0
 
 * Updated dependencies.

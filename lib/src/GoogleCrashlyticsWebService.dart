@@ -1,16 +1,18 @@
 import 'dart:async';
 
 import 'package:eggnstone_flutter/eggnstone_flutter.dart';
-import 'package:eggnstone_google_crashlytics/google/IGoogleCrashlyticsService.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get_it/get_it.dart';
+
+import 'IGoogleCrashlyticsService.dart';
 
 typedef CrashReporterCallback = Function(Map<String, dynamic> params);
 
 class GoogleCrashlyticsService
     implements IGoogleCrashlyticsService
 {
-    final FirebaseCrashlytics _firebaseCrashlytics;
+    final FakeFirebaseCrashlytics _firebaseCrashlytics;
     final CrashReporterCallback? _additionalCrashReporterCallback;
 
     bool _isEnabled;
@@ -18,9 +20,9 @@ class GoogleCrashlyticsService
     GoogleCrashlyticsService._internal(this._firebaseCrashlytics, this._additionalCrashReporterCallback, this._isEnabled);
 
     static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
-    => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled);
+    => GoogleCrashlyticsService.createMockable(FakeFirebaseCrashlytics(), alternativeCrashReporterCallback, startEnabled);
 
-    static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
+    static Future<IGoogleCrashlyticsService> createMockable(FakeFirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
     async
     {
         var instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporterCallback, startEnabled);
@@ -166,5 +168,61 @@ class GoogleCrashlyticsService
 
         if (_isEnabled)
             _firebaseCrashlytics.setCustomKey(key, value);
+    }
+}
+
+class FakeFirebaseCrashlytics
+{
+    static const String CRASHLYTICS_ERROR = 'CrashlyticsError';
+    static const String CRASHLYTICS_FLUTTER_ERROR = 'CrashlyticsFlutterError';
+
+    String? _userIdentifier;
+    Map<String, String> _customData = {};
+
+    void recordFlutterError(FlutterErrorDetails details)
+    {
+        print('x');
+
+        if (GetIt.instance.isRegistered<IAnalyticsService>())
+        {
+            Map<String, dynamic> map =
+            {
+                'Error': details.exception.toString(),
+                if (details.stack != null) 'StackTrace': details.stack.toString(),
+                'Platform': kIsWeb ? 'Web' : 'Android',
+                if (_userIdentifier != null) 'UserId': _userIdentifier,
+            };
+
+            map.addAll(_customData.map((key, value)
+            => MapEntry('Custom_' + key, value)));
+
+            GetIt.instance.get<IAnalyticsService>().track(CRASHLYTICS_FLUTTER_ERROR, map);
+        }
+    }
+
+    void recordError(Object error, StackTrace stackTrace)
+    {
+        Map<String, dynamic> map =
+        {
+            'Error': error.toString(),
+            'StackTrace': stackTrace.toString(),
+            'Platform': kIsWeb ? 'Web' : 'Android',
+            if (_userIdentifier != null) 'UserId': _userIdentifier,
+        };
+
+        map.addAll(_customData.map((key, value)
+        => MapEntry('Custom_' + key, value)));
+
+        GetIt.instance.get<IAnalyticsService>().track(CRASHLYTICS_ERROR, map);
+    }
+
+    void setUserIdentifier(String value)
+    {
+        _userIdentifier = value;
+    }
+
+    void setCustomKey(String key, String value)
+    {
+        _customData[key] = value;
     }
 }
