@@ -18,13 +18,15 @@ class GoogleCrashlyticsService
 
     GoogleCrashlyticsService._internal(this._firebaseCrashlytics, this._additionalCrashReporterCallback, this._isEnabled);
 
+    // ignore: avoid_positional_boolean_parameters
     static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
     => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled);
 
+    // ignore: avoid_positional_boolean_parameters
     static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
     async
     {
-        var instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporterCallback, startEnabled);
+        final GoogleCrashlyticsService instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporterCallback, startEnabled);
         instance._init();
         return instance;
     }
@@ -66,8 +68,8 @@ class GoogleCrashlyticsService
 
                 if (_additionalCrashReporterCallback != null)
                 {
-                    Map<String, dynamic> map =
-                    {
+                    final Map<String, dynamic> map =
+                    <String, dynamic>{
                         'Exception': details.exception.toString(),
                         'CrashlyticsSource': 'GoogleCrashlyticsService/FlutterError.onError',
                         if (details.stack != null) 'StackTrace': details.stack.toString()
@@ -90,9 +92,11 @@ class GoogleCrashlyticsService
         };
     }
 
+    // ignore: use_setters_to_change_properties, avoid_positional_boolean_parameters
     void setEnabled(bool newValue)
     => _isEnabled = newValue;
 
+    @override
     void run(Widget app)
     {
         runZonedGuarded<Future<void>>(
@@ -126,8 +130,8 @@ class GoogleCrashlyticsService
 
                     if (_additionalCrashReporterCallback != null)
                     {
-                        Map<String, dynamic> map =
-                        {
+                        final Map<String, dynamic> map =
+                        <String, dynamic>{
                             'Error': error.toString(),
                             'CrashlyticsSource': 'GoogleCrashlyticsService.run/runZoned/onError'
                         };
@@ -154,6 +158,7 @@ class GoogleCrashlyticsService
     @override
     void setUserId(String value)
     {
+        // ignore: prefer_interpolation_to_compose_strings
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': setUserId: $value');
 
         if (_isEnabled)
@@ -163,6 +168,7 @@ class GoogleCrashlyticsService
     @override
     void setUserProperty(String key, String value)
     {
+        // ignore: prefer_interpolation_to_compose_strings
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': setUserProperty: key=$key value=$value');
 
         if (_isEnabled)
