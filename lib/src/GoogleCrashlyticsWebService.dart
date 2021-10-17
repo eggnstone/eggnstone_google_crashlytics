@@ -175,6 +175,16 @@ class GoogleCrashlyticsService
         if (_isEnabled)
             _firebaseCrashlytics.setCustomKey(key, value);
     }
+
+    @override
+    void recordError(Object error, StackTrace stackTrace)
+    {
+        // ignore: prefer_interpolation_to_compose_strings
+        logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': recordError: error=$error stackTrace=$stackTrace');
+
+        if (_isEnabled)
+            _firebaseCrashlytics.recordError(error, stackTrace);
+    }
 }
 
 class FakeFirebaseCrashlytics

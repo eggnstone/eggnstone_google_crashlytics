@@ -72,6 +72,7 @@ build/
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
+!eggnstone_google_crashlytics.iml
 
 # As per https://dart.dev/guides/libraries/private-files#packages this library should ignore and remove the pubspec.lock file.
 /pubspec.lock
