@@ -99,69 +99,60 @@ class GoogleCrashlyticsService
     @override
     void run(Widget app)
     {
-        runAsync(()
-        {}, app);
+        runZonedGuarded<void>(()
+        {
+            runApp(app);
+        }, onError);
     }
 
     @override
-    Future<void> runAsync(Function prepareFunction, Widget app)
-    async
+    void onError(Object error, StackTrace stackTrace)
     {
-        await runZonedGuarded<Future<void>>(
-                ()
-            async
-            {
-                await prepareFunction();
-                runApp(app);
-            },
-                (Object error, StackTrace stackTrace)
-            {
-                logError('##################################################');
-                logError('# GoogleCrashlyticsService.run/runZoned/onError');
-                logError(error.toString());
-                logError(stackTrace.toString());
-                logError('##################################################');
+        logError('##################################################');
+        logError('# GoogleCrashlyticsService.onError');
+        logError(error.toString());
+        logError(stackTrace.toString());
+        logError('##################################################');
 
-                if (_isEnabled)
+        if (_isEnabled)
+        {
+            try
+            {
+                _firebaseCrashlytics.recordError(error, stackTrace);
+            }
+            catch (e2, stackTrace2)
+            {
+                logError('##################################################');
+                logError('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError');
+                logError(e2.toString());
+                logError(stackTrace2.toString());
+                logError('##################################################');
+            }
+
+            if (_additionalCrashReporterCallback != null)
+            {
+                final Map<String, dynamic> map =
+                <String, dynamic>{
+                    'Error': error.toString(),
+                    'CrashlyticsSource': 'GoogleCrashlyticsService.onError'
+                };
+
+                map['StackTrace'] = stackTrace.toString();
+
+                try
                 {
-                    try
-                    {
-                        _firebaseCrashlytics.recordError(error, stackTrace);
-                    }
-                    catch (e2, stackTrace2)
-                    {
-                        logError('##################################################');
-                        logError('# GoogleCrashlyticsService.run/runZoned/onError/_crashlytics.recordError');
-                        logError(e2.toString());
-                        logError(stackTrace2.toString());
-                        logError('##################################################');
-                    }
-
-                    if (_additionalCrashReporterCallback != null)
-                    {
-                        final Map<String, dynamic> map =
-                        <String, dynamic>{
-                            'Error': error.toString(),
-                            'CrashlyticsSource': 'GoogleCrashlyticsService.run/runZoned/onError'
-                        };
-
-                        map['StackTrace'] = stackTrace.toString();
-
-                        try
-                        {
-                            _additionalCrashReporterCallback!(map);
-                        }
-                        catch (e2, stackTrace2)
-                        {
-                            logError('##################################################');
-                            logError('# GoogleCrashlyticsService.run/runZoned/onError/_additionalCrashReporterCallback');
-                            logError(e2.toString());
-                            logError(stackTrace2.toString());
-                            logError('##################################################');
-                        }
-                    }
+                    _additionalCrashReporterCallback!(map);
                 }
-            });
+                catch (e2, stackTrace2)
+                {
+                    logError('##################################################');
+                    logError('# GoogleCrashlyticsService.onError/_additionalCrashReporterCallback');
+                    logError(e2.toString());
+                    logError(stackTrace2.toString());
+                    logError('##################################################');
+                }
+            }
+        }
     }
 
     @override
