@@ -1,3 +1,9 @@
+## 3.4.0
+
+* Added runAsync() to ICrashlyticsService.
+* Deprecated run() to ICrashlyticsService.
+* Updated dependencies.
+
 ## 3.3.1
 
 * Added recordError() to ICrashlyticsService.

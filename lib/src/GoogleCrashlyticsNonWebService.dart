@@ -99,10 +99,19 @@ class GoogleCrashlyticsService
     @override
     void run(Widget app)
     {
-        runZonedGuarded<Future<void>>(
+        runAsync(()
+        {}, app);
+    }
+
+    @override
+    Future<void> runAsync(Function prepareFunction, Widget app)
+    async
+    {
+        await runZonedGuarded<Future<void>>(
                 ()
             async
             {
+                await prepareFunction();
                 runApp(app);
             },
                 (Object error, StackTrace stackTrace)

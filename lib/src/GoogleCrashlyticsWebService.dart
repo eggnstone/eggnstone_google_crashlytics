@@ -100,16 +100,25 @@ class GoogleCrashlyticsService
     @override
     void run(Widget app)
     {
-        runZonedGuarded<Future<void>>(
+        runAsync(()
+        {}, app);
+    }
+
+    @override
+    Future<void> runAsync(Function prepareFunction, Widget app)
+    async
+    {
+        await runZonedGuarded<Future<void>>(
                 ()
             async
             {
+                await prepareFunction();
                 runApp(app);
             },
                 (Object error, StackTrace stackTrace)
             {
                 logError('##################################################');
-                logError('# GoogleCrashlyticsService.run/runZoned/onError');
+                logError('# GoogleCrashlyticsService.runAsync/runZoned/onError');
                 logError(error.toString());
                 logError(stackTrace.toString());
                 logError('##################################################');
@@ -123,7 +132,7 @@ class GoogleCrashlyticsService
                     catch (e2, stackTrace2)
                     {
                         logError('##################################################');
-                        logError('# GoogleCrashlyticsService.run/runZoned/onError/_crashlytics.recordError');
+                        logError('# GoogleCrashlyticsService.runAsync/runZoned/onError/_crashlytics.recordError');
                         logError(e2.toString());
                         logError(stackTrace2.toString());
                         logError('##################################################');
@@ -134,7 +143,7 @@ class GoogleCrashlyticsService
                         final Map<String, dynamic> map =
                         <String, dynamic>{
                             'Error': error.toString(),
-                            'CrashlyticsSource': 'GoogleCrashlyticsService.run/runZoned/onError'
+                            'CrashlyticsSource': 'GoogleCrashlyticsService.runAsync/runZoned/onError'
                         };
 
                         map['StackTrace'] = stackTrace.toString();
@@ -146,7 +155,7 @@ class GoogleCrashlyticsService
                         catch (e2, stackTrace2)
                         {
                             logError('##################################################');
-                            logError('# GoogleCrashlyticsService.run/runZoned/onError/_additionalCrashReporterCallback');
+                            logError('# GoogleCrashlyticsService.runAsync/runZoned/onError/_additionalCrashReporterCallback');
                             logError(e2.toString());
                             logError(stackTrace2.toString());
                             logError('##################################################');
