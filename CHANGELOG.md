@@ -1,3 +1,7 @@
+## 3.4.2
+
+* Cleanup. More logging.
+
 ## 3.4.1
 
 * Added onError() to ICrashlyticsService.

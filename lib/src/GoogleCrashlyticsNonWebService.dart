@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:eggnstone_flutter/eggnstone_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
-
 import 'IGoogleCrashlyticsService.dart';
 
 typedef CrashReporterCallback = Function(Map<String, dynamic> params);
@@ -56,11 +55,12 @@ class GoogleCrashlyticsService
                 try
                 {
                     _firebaseCrashlytics.recordFlutterError(details);
+                    logInfo('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError succeeded.');
                 }
                 catch (e2, stackTrace2)
                 {
                     logError('##################################################');
-                    logError('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError');
+                    logError('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError failed!');
                     logError(e2.toString());
                     logError(stackTrace2.toString());
                     logError('##################################################');
@@ -78,11 +78,12 @@ class GoogleCrashlyticsService
                     try
                     {
                         _additionalCrashReporterCallback!(map);
+                        logInfo('# GoogleCrashlyticsService/FlutterError.onError/_additionalCrashReporterCallback succeeded.');
                     }
                     catch (e2, stackTrace2)
                     {
                         logError('##################################################');
-                        logError('# GoogleCrashlyticsService/FlutterError.onError/_additionalCrashReporterCallback');
+                        logError('# GoogleCrashlyticsService/FlutterError.onError/_additionalCrashReporterCallback failed!');
                         logError(e2.toString());
                         logError(stackTrace2.toString());
                         logError('##################################################');
@@ -119,11 +120,12 @@ class GoogleCrashlyticsService
             try
             {
                 _firebaseCrashlytics.recordError(error, stackTrace);
+                logInfo('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError succeeded.');
             }
             catch (e2, stackTrace2)
             {
                 logError('##################################################');
-                logError('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError');
+                logError('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError failed!');
                 logError(e2.toString());
                 logError(stackTrace2.toString());
                 logError('##################################################');
@@ -142,11 +144,12 @@ class GoogleCrashlyticsService
                 try
                 {
                     _additionalCrashReporterCallback!(map);
+                    logInfo('# GoogleCrashlyticsService.onError/_additionalCrashReporterCallback succeeded.');
                 }
                 catch (e2, stackTrace2)
                 {
                     logError('##################################################');
-                    logError('# GoogleCrashlyticsService.onError/_additionalCrashReporterCallback');
+                    logError('# GoogleCrashlyticsService.onError/_additionalCrashReporterCallback failed!');
                     logError(e2.toString());
                     logError(stackTrace2.toString());
                     logError('##################################################');
