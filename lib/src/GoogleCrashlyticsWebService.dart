@@ -11,24 +11,37 @@ typedef CrashReporterCallback = Function(Map<String, dynamic> params);
 class GoogleCrashlyticsService
     implements IGoogleCrashlyticsService
 {
-    final FakeFirebaseCrashlytics _firebaseCrashlytics;
+    final FakeFirebaseCrashlytics _fakeFirebaseCrashlytics;
     final CrashReporterCallback? _additionalCrashReporterCallback;
 
-    bool _isEnabled;
+    late bool _isEnabled;
 
-    GoogleCrashlyticsService._internal(this._firebaseCrashlytics, this._additionalCrashReporterCallback, this._isEnabled);
+    bool _isDebugEnabled;
 
-    // ignore: avoid_positional_boolean_parameters
-    static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
-    => GoogleCrashlyticsService.createMockable(FakeFirebaseCrashlytics(), alternativeCrashReporterCallback, startEnabled);
+    GoogleCrashlyticsService._internal(this._fakeFirebaseCrashlytics, this._additionalCrashReporterCallback, this._isEnabled, this._isDebugEnabled);
 
     // ignore: avoid_positional_boolean_parameters
-    static Future<IGoogleCrashlyticsService> createMockable(FakeFirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
+    static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled, bool startDebugEnabled)
+    => GoogleCrashlyticsService.createMockable(FakeFirebaseCrashlytics(startDebugEnabled: startDebugEnabled), alternativeCrashReporterCallback, startEnabled, startDebugEnabled);
+
+    // ignore: avoid_positional_boolean_parameters
+    static Future<IGoogleCrashlyticsService> createMockable(FakeFirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled, bool startDebugEnabled)
     async
     {
-        final GoogleCrashlyticsService instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporterCallback, startEnabled);
+        final GoogleCrashlyticsService instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporterCallback, startEnabled, startDebugEnabled);
         instance._init();
         return instance;
+    }
+
+    @override
+    bool get isDebugEnabled
+    => _isDebugEnabled;
+
+    @override
+    set isDebugEnabled(bool newValue)
+    {
+        _isDebugEnabled = newValue;
+        _fakeFirebaseCrashlytics.isDebugEnabled = newValue;
     }
 
     void _init()
@@ -55,13 +68,13 @@ class GoogleCrashlyticsService
             {
                 try
                 {
-                    _firebaseCrashlytics.recordFlutterError(details);
-                    logInfo('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError succeeded.');
+                    _fakeFirebaseCrashlytics.recordFlutterError(details);
+                    logInfo('# GoogleCrashlyticsService/FlutterError.onError/_fakeFirebaseCrashlytics.recordFlutterError succeeded.');
                 }
                 catch (e2, stackTrace2)
                 {
                     logError('##################################################');
-                    logError('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError failed!');
+                    logError('# GoogleCrashlyticsService/FlutterError.onError/_fakeFirebaseCrashlytics.recordFlutterError failed!');
                     logError(e2.toString());
                     logError(stackTrace2.toString());
                     logError('##################################################');
@@ -120,13 +133,13 @@ class GoogleCrashlyticsService
         {
             try
             {
-                _firebaseCrashlytics.recordError(error, stackTrace);
-                logInfo('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError succeeded.');
+                _fakeFirebaseCrashlytics.recordError(error, stackTrace);
+                logInfo('# GoogleCrashlyticsService.onError/_fakeFirebaseCrashlytics.recordError succeeded.');
             }
             catch (e2, stackTrace2)
             {
                 logError('##################################################');
-                logError('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError failed!');
+                logError('# GoogleCrashlyticsService.onError/_fakeFirebaseCrashlytics.recordError failed!');
                 logError(e2.toString());
                 logError(stackTrace2.toString());
                 logError('##################################################');
@@ -166,7 +179,7 @@ class GoogleCrashlyticsService
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': setUserId: $value');
 
         if (_isEnabled)
-            _firebaseCrashlytics.setUserIdentifier(value);
+            _fakeFirebaseCrashlytics.setUserIdentifier(value);
     }
 
     @override
@@ -176,7 +189,7 @@ class GoogleCrashlyticsService
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': setUserProperty: key=$key value=$value');
 
         if (_isEnabled)
-            _firebaseCrashlytics.setCustomKey(key, value);
+            _fakeFirebaseCrashlytics.setCustomKey(key, value);
     }
 
     @override
@@ -186,6 +199,6 @@ class GoogleCrashlyticsService
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': recordError: error=$error stackTrace=$stackTrace');
 
         if (_isEnabled)
-            _firebaseCrashlytics.recordError(error, stackTrace);
+            _fakeFirebaseCrashlytics.recordError(error, stackTrace);
     }
 }

@@ -1,3 +1,8 @@
+## 3.4.3
+
+* Added isDebugEnabled to ICrashlyticsService.
+* Added startDebugEnabled.
+
 ## 3.4.2
 
 * Cleanup. More logging.

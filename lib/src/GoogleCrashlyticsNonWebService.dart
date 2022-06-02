@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:eggnstone_flutter/eggnstone_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
+
 import 'IGoogleCrashlyticsService.dart';
 
 typedef CrashReporterCallback = Function(Map<String, dynamic> params);
@@ -14,20 +15,32 @@ class GoogleCrashlyticsService
     final CrashReporterCallback? _additionalCrashReporterCallback;
 
     bool _isEnabled;
+    bool _isDebugEnabled;
 
-    GoogleCrashlyticsService._internal(this._firebaseCrashlytics, this._additionalCrashReporterCallback, this._isEnabled);
-
-    // ignore: avoid_positional_boolean_parameters
-    static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
-    => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled);
+    GoogleCrashlyticsService._internal(this._firebaseCrashlytics, this._additionalCrashReporterCallback, this._isEnabled, this._isDebugEnabled);
 
     // ignore: avoid_positional_boolean_parameters
-    static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled)
+    static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled, bool startDebugEnabled)
+    => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled, startDebugEnabled);
+
+    // ignore: avoid_positional_boolean_parameters
+    static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled, bool startDebugEnabled)
     async
     {
-        final GoogleCrashlyticsService instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporterCallback, startEnabled);
+        final GoogleCrashlyticsService instance = GoogleCrashlyticsService._internal(crashlytics, alternativeCrashReporterCallback, startEnabled, startDebugEnabled);
         instance._init();
         return instance;
+    }
+
+    @override
+    bool get isDebugEnabled
+    => _isDebugEnabled;
+
+    @override
+    set isDebugEnabled(bool newValue)
+    {
+        _isDebugEnabled = newValue;
+        //_firebaseCrashlytics.isDebugEnabled = newValue;
     }
 
     void _init()
@@ -55,12 +68,12 @@ class GoogleCrashlyticsService
                 try
                 {
                     _firebaseCrashlytics.recordFlutterError(details);
-                    logInfo('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError succeeded.');
+                    logInfo('# GoogleCrashlyticsService/FlutterError.onError/_firebaseCrashlytics.recordFlutterError succeeded.');
                 }
                 catch (e2, stackTrace2)
                 {
                     logError('##################################################');
-                    logError('# GoogleCrashlyticsService/FlutterError.onError/_crashlytics.recordFlutterError failed!');
+                    logError('# GoogleCrashlyticsService/FlutterError.onError/_firebaseCrashlytics.recordFlutterError failed!');
                     logError(e2.toString());
                     logError(stackTrace2.toString());
                     logError('##################################################');
