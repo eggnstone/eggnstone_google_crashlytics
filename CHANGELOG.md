@@ -1,3 +1,8 @@
+## 3.4.4
+
+* Updated dependencies.
+* Improved error reporting of web events.
+
 ## 3.4.3
 
 * Added isDebugEnabled to ICrashlyticsService.

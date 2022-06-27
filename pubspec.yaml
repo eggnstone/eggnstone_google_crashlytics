@@ -13,12 +13,12 @@ dependencies:
     sdk: flutter
 
   # Flutter tools
-  eggnstone_flutter: ^3.4.3
+  eggnstone_flutter: ^3.4.4
   #eggnstone_flutter:
   #  path: ../eggnstone_flutter
 
   # Google/Firebase Crashlytics, logging crashes
-  firebase_crashlytics: ^2.8.1
+  firebase_crashlytics: ^2.8.2
   # Service locator (included via eggnstone_flutter but "flutter pub publish" warns if not included here)
   get_it: ^7.2.0
 
