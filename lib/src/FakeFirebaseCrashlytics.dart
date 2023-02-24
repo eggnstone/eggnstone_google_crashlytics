@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eggnstone_dart/eggnstone_dart.dart';
 import 'package:eggnstone_flutter/eggnstone_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
