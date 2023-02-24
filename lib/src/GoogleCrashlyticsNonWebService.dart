@@ -67,7 +67,7 @@ class GoogleCrashlyticsService
             {
                 try
                 {
-                    _firebaseCrashlytics.recordFlutterError(details);
+                    unawaited(_firebaseCrashlytics.recordFlutterError(details));
                     logInfo('# GoogleCrashlyticsService/FlutterError.onError/_firebaseCrashlytics.recordFlutterError succeeded.');
                 }
                 catch (e2, stackTrace2)
@@ -132,7 +132,7 @@ class GoogleCrashlyticsService
         {
             try
             {
-                _firebaseCrashlytics.recordError(error, stackTrace);
+                unawaited(_firebaseCrashlytics.recordError(error, stackTrace));
                 logInfo('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError succeeded.');
             }
             catch (e2, stackTrace2)
@@ -178,7 +178,7 @@ class GoogleCrashlyticsService
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': setUserId: $value');
 
         if (_isEnabled)
-            _firebaseCrashlytics.setUserIdentifier(value);
+            unawaited(_firebaseCrashlytics.setUserIdentifier(value));
     }
 
     @override
@@ -188,7 +188,7 @@ class GoogleCrashlyticsService
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': setUserProperty: key=$key value=$value');
 
         if (_isEnabled)
-            _firebaseCrashlytics.setCustomKey(key, value);
+            unawaited(_firebaseCrashlytics.setCustomKey(key, value));
     }
 
     @override
@@ -198,6 +198,6 @@ class GoogleCrashlyticsService
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': recordError: error=$error stackTrace=$stackTrace');
 
         if (_isEnabled)
-            _firebaseCrashlytics.recordError(error, stackTrace);
+            unawaited(_firebaseCrashlytics.recordError(error, stackTrace));
     }
 }
