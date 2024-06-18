@@ -29,19 +29,19 @@ class FakeFirebaseCrashlytics
         final DiagnosticsNode? context = details.context;
         final String? contextText = context is ErrorDescription ? context.value.toString() : null;
 
-        final Map<String, dynamic> map =
-        <String, dynamic>{
+        final Map<String, Object> map =
+        <String, Object>{
             if (contextText != null) 'Context': contextText,
             'Error': details.exception.toString(),
-            if (details.library != null) 'Library': details.library,
+            if (details.library != null) 'Library': details.library!,
             if (details.stack != null) 'StackTrace': details.stack.toString(),
             'Platform': kIsWeb ? 'Web' : Platform.isAndroid ? 'Android' : Platform.isIOS ? 'iOS' : '<unknown>',
-            if (_userIdentifier != null) 'UserId': _userIdentifier,
+            if (_userIdentifier != null) 'UserId': _userIdentifier!
         };
 
-        map.addAll(_customData.map<String, dynamic>((String key, dynamic value)
+        map.addAll(_customData.map<String, Object>((String key, Object value)
         // ignore: prefer_interpolation_to_compose_strings
-        => MapEntry<String, dynamic>('Custom_' + key, value)));
+        => MapEntry<String, Object>('Custom_' + key, value)));
 
         if (isDebugEnabled)
             logInfo('FakeFirebaseCrashlytics.recordFlutterError: calling IAnalyticsService.track ...');
@@ -54,17 +54,17 @@ class FakeFirebaseCrashlytics
     {
         if (GetIt.instance.isRegistered<IAnalyticsService>())
         {
-            final Map<String, dynamic> map =
-            <String, dynamic>{
+            final Map<String, Object> map =
+            <String, Object>{
                 'Error': error.toString(),
                 'StackTrace': stackTrace.toString(),
                 'Platform': kIsWeb ? 'Web' : Platform.isAndroid ? 'Android' : Platform.isIOS ? 'iOS' : '<unknown>',
-                if (_userIdentifier != null) 'UserId': _userIdentifier,
+                if (_userIdentifier != null) 'UserId': _userIdentifier!
             };
 
-            map.addAll(_customData.map<String, dynamic>((String key, dynamic value)
+            map.addAll(_customData.map<String, Object>((String key, Object value)
             // ignore: prefer_interpolation_to_compose_strings
-            => MapEntry<String, dynamic>('Custom_' + key, value)));
+            => MapEntry<String, Object>('Custom_' + key, value)));
 
             if (isDebugEnabled)
                 logInfo('FakeFirebaseCrashlytics.recordError: calling IAnalyticsService.track ...');

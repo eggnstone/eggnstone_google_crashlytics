@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'FakeFirebaseCrashlytics.dart';
 import 'IGoogleCrashlyticsService.dart';
 
-typedef CrashReporterCallback = Function(Map<String, dynamic> params);
+typedef CrashReporterCallback = Function(Map<String, Object> params);
 
 class GoogleCrashlyticsService
     implements IGoogleCrashlyticsService
@@ -82,8 +82,8 @@ class GoogleCrashlyticsService
 
                 if (_additionalCrashReporterCallback != null)
                 {
-                    final Map<String, dynamic> map =
-                    <String, dynamic>{
+                    final Map<String, Object> map =
+                    <String, Object>{
                         'Exception': details.exception.toString(),
                         'CrashlyticsSource': 'GoogleCrashlyticsService/FlutterError.onError',
                         if (details.stack != null) 'StackTrace': details.stack.toString()
@@ -147,8 +147,8 @@ class GoogleCrashlyticsService
 
             if (_additionalCrashReporterCallback != null)
             {
-                final Map<String, dynamic> map =
-                <String, dynamic>{
+                final Map<String, Object> map =
+                <String, Object>{
                     'Error': error.toString(),
                     'CrashlyticsSource': 'GoogleCrashlyticsService.onError'
                 };
