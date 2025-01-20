@@ -1,3 +1,8 @@
+## 4.0.0
+
+* Removed GetIt.
+* Removed run().
+
 ## 3.8.0
 
 * Updated dependencies.
