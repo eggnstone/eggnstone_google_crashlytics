@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:eggnstone_dart/eggnstone_dart.dart';
 import 'package:eggnstone_flutter/eggnstone_flutter.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 
 class FakeFirebaseCrashlytics
 {
@@ -14,13 +13,14 @@ class FakeFirebaseCrashlytics
     final Map<String, String> _customData = <String, String>{};
 
     bool isDebugEnabled;
+    IAnalyticsService? analyticsService;
 
-    FakeFirebaseCrashlytics({required bool startDebugEnabled}) :
-            isDebugEnabled = startDebugEnabled;
+    FakeFirebaseCrashlytics({required bool startDebugEnabled, required this.analyticsService})
+        : isDebugEnabled = startDebugEnabled;
 
     void recordFlutterError(FlutterErrorDetails details)
     {
-        if (!GetIt.instance.isRegistered<IAnalyticsService>())
+        if (analyticsService == null)
         {
             logWarning('FakeFirebaseCrashlytics.recordFlutterError: Cannot record Flutter error because IAnalyticsService not registered.');
             return;
@@ -30,45 +30,47 @@ class FakeFirebaseCrashlytics
         final String? contextText = context is ErrorDescription ? context.value.toString() : null;
 
         final Map<String, Object> map =
-        <String, Object>{
-            if (contextText != null) 'Context': contextText,
-            'Error': details.exception.toString(),
-            if (details.library != null) 'Library': details.library!,
-            if (details.stack != null) 'StackTrace': details.stack.toString(),
-            'Platform': kIsWeb ? 'Web' : Platform.isAndroid ? 'Android' : Platform.isIOS ? 'iOS' : '<unknown>',
-            if (_userIdentifier != null) 'UserId': _userIdentifier!
-        };
+            <String, Object>
+            {
+                if (contextText != null) 'Context': contextText,
+                'Error': details.exception.toString(),
+                if (details.library != null) 'Library': details.library!,
+                if (details.stack != null) 'StackTrace': details.stack.toString(),
+                'Platform': kIsWeb ? 'Web' : Platform.isAndroid ? 'Android' : Platform.isIOS ? 'iOS' : '<unknown>',
+                if (_userIdentifier != null) 'UserId': _userIdentifier!
+            };
 
         map.addAll(_customData.map<String, Object>((String key, Object value)
-        // ignore: prefer_interpolation_to_compose_strings
-        => MapEntry<String, Object>('Custom_' + key, value)));
+                // ignore: prefer_interpolation_to_compose_strings
+                => MapEntry<String, Object>('Custom_' + key, value)));
 
         if (isDebugEnabled)
             logInfo('FakeFirebaseCrashlytics.recordFlutterError: calling IAnalyticsService.track ...');
-        GetIt.instance.get<IAnalyticsService>().track(CRASHLYTICS_FLUTTER_ERROR, map);
+        analyticsService!.track(CRASHLYTICS_FLUTTER_ERROR, map);
         if (isDebugEnabled)
             logInfo('FakeFirebaseCrashlytics.recordFlutterError: called IAnalyticsService.track.');
     }
 
     void recordError(Object error, StackTrace stackTrace)
     {
-        if (GetIt.instance.isRegistered<IAnalyticsService>())
+        if (analyticsService != null)
         {
             final Map<String, Object> map =
-            <String, Object>{
-                'Error': error.toString(),
-                'StackTrace': stackTrace.toString(),
-                'Platform': kIsWeb ? 'Web' : Platform.isAndroid ? 'Android' : Platform.isIOS ? 'iOS' : '<unknown>',
-                if (_userIdentifier != null) 'UserId': _userIdentifier!
-            };
+                <String, Object>
+                {
+                    'Error': error.toString(),
+                    'StackTrace': stackTrace.toString(),
+                    'Platform': kIsWeb ? 'Web' : Platform.isAndroid ? 'Android' : Platform.isIOS ? 'iOS' : '<unknown>',
+                    if (_userIdentifier != null) 'UserId': _userIdentifier!
+                };
 
             map.addAll(_customData.map<String, Object>((String key, Object value)
-            // ignore: prefer_interpolation_to_compose_strings
-            => MapEntry<String, Object>('Custom_' + key, value)));
+                    // ignore: prefer_interpolation_to_compose_strings
+                    => MapEntry<String, Object>('Custom_' + key, value)));
 
             if (isDebugEnabled)
                 logInfo('FakeFirebaseCrashlytics.recordError: calling IAnalyticsService.track ...');
-            GetIt.instance.get<IAnalyticsService>().track(CRASHLYTICS_ERROR, map);
+            analyticsService!.track(CRASHLYTICS_ERROR, map);
             if (isDebugEnabled)
                 logInfo('FakeFirebaseCrashlytics.recordError: called IAnalyticsService.track.');
         }
