@@ -70,19 +70,21 @@ class GoogleCrashlyticsService
             return;
         }
 
-        try
-        {
-            unawaited(_firebaseCrashlytics.recordError(error, stackTrace));
-            logInfo('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError succeeded.');
-        }
-        catch (e2, stackTrace2)
-        {
-            logError('##################################################');
-            logError('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError failed!');
-            logError(e2.toString());
-            logError(stackTrace2.toString());
-            logError('##################################################');
-        }
+        unawaited(_firebaseCrashlytics.recordError(error, stackTrace).then(
+                (_)
+                {
+                    logInfo('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError succeeded.');
+                }, 
+                onError: (dynamic e, StackTrace st)
+                {
+                    logError('##################################################');
+                    logError('# GoogleCrashlyticsService.onError/_firebaseCrashlytics.recordError failed!');
+                    logError(e.toString());
+                    logError(stackTrace.toString());
+                    logError('##################################################');
+                }
+            )
+        );
 
         if (_additionalCrashReporterCallback != null)
         {
@@ -138,6 +140,20 @@ class GoogleCrashlyticsService
         logInfo((_isEnabled ? 'GoogleCrashlytics' : 'Disabled-GoogleCrashlytics') + ': recordError: error=$error stackTrace=$stackTrace');
 
         if (_isEnabled)
-            unawaited(_firebaseCrashlytics.recordError(error, stackTrace));
+            unawaited(_firebaseCrashlytics.recordError(error, stackTrace).then(
+                    (_)
+                    {
+                        logInfo('# GoogleCrashlyticsService.recordError/_firebaseCrashlytics.recordError succeeded.');
+                    },
+                    onError: (dynamic e, StackTrace st)
+                    {
+                        logError('##################################################');
+                        logError('# GoogleCrashlyticsService.recordError/_firebaseCrashlytics.recordError failed!');
+                        logError(e.toString());
+                        logError(stackTrace.toString());
+                        logError('##################################################');
+                    }
+                )
+            );
     }
 }

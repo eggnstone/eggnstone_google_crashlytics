@@ -1,3 +1,7 @@
+## 4.3.0
+
+* Made WASM-safe (using dart.library.js_util instead of dart.library.html).
+
 ## 4.2.0
 
 * Using freezed 3.0.0 now.
