@@ -15,10 +15,10 @@ dependencies:
   eggnstone_dart: ^1.3.0
   #eggnstone_dart:
   #  path: ../eggnstone_dart
-  eggnstone_flutter: ^4.2.0
+  eggnstone_flutter: ^4.3.3
   #eggnstone_flutter:
   #  path: ../eggnstone_flutter
-  firebase_crashlytics: ^4.3.4
+  firebase_crashlytics: ^4.3.5
 
 dev_dependencies:
   flutter_test:

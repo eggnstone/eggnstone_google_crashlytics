@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:eggnstone_dart/eggnstone_dart.dart';
 import 'package:eggnstone_flutter/eggnstone_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 
 import 'IGoogleCrashlyticsService.dart';
 
@@ -22,7 +24,18 @@ class GoogleCrashlyticsService
 
     // ignore: avoid_positional_boolean_parameters
     static Future<IGoogleCrashlyticsService> create(CrashReporterCallback? alternativeCrashReporterCallback, IAnalyticsService? analyticsService, bool startEnabled, bool startDebugEnabled)
-    => GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled, startDebugEnabled);
+    {
+        // firebase_crashlytics supports Android, iOS, and macOS.
+
+        if (kIsWeb)
+            throw Exception('This should not happen. GoogleCrashlyticsWebService should have been imported and used.');
+
+        if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
+            return GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled, startDebugEnabled);
+
+        // TODO: Support like GoogleCrashlyticsWebService, i.e. merge web and not-supported platforms.
+        throw UnsupportedError('GoogleCrashlyticsService is not supported on this platform.');
+    }
 
     // ignore: avoid_positional_boolean_parameters
     static Future<IGoogleCrashlyticsService> createMockable(FirebaseCrashlytics crashlytics, CrashReporterCallback? alternativeCrashReporterCallback, bool startEnabled, bool startDebugEnabled)
