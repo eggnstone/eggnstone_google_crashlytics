@@ -1,4 +1,4 @@
-## 4.4.0
+## 4.4.1
 
 * Added fake support for non-Web/-Android/-iOS/-macOS.
 

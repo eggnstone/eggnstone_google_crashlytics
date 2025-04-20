@@ -1,3 +1,3 @@
-import 'FakeFirebaseCrashlytics.dart';
+import 'FakeGoogleCrashlyticsService.dart';
 
-typedef GoogleCrashlyticsService = FakeFirebaseCrashlytics;
+typedef GoogleCrashlyticsService = FakeGoogleCrashlyticsService;

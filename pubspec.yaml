@@ -2,7 +2,7 @@ name: eggnstone_google_crashlytics
 copyright: 2020-2025 Mark Eggenstein
 description: A wrapper for Google Crashlytics. Allows to report via Firebase.
 homepage: https://github.com/eggnstone/eggnstone_google_crashlytics
-version: 4.4.0
+version: 4.4.1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
