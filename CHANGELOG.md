@@ -1,3 +1,7 @@
+## 4.4.0
+
+* Added fake support for non-Web/-Android/-iOS/-macOS.
+
 ## 4.3.0
 
 * Made WASM-safe (using dart.library.js_util instead of dart.library.html).

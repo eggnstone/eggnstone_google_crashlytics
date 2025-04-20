@@ -6,6 +6,7 @@ import 'package:eggnstone_flutter/eggnstone_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
+import 'FakeGoogleCrashlyticsService.dart';
 import 'IGoogleCrashlyticsService.dart';
 
 typedef CrashReporterCallback = Function(Map<String, Object> params);
@@ -33,8 +34,7 @@ class GoogleCrashlyticsService
         if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
             return GoogleCrashlyticsService.createMockable(FirebaseCrashlytics.instance, alternativeCrashReporterCallback, startEnabled, startDebugEnabled);
 
-        // TODO: Support like GoogleCrashlyticsWebService, i.e. merge web and not-supported platforms.
-        throw UnsupportedError('GoogleCrashlyticsService is not supported on this platform.');
+        return FakeGoogleCrashlyticsService.create(alternativeCrashReporterCallback, analyticsService, startEnabled, startDebugEnabled);
     }
 
     // ignore: avoid_positional_boolean_parameters
